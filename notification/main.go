@@ -12,7 +12,7 @@ import (
 func main() {
 	// make a new reader that consumes from topic-A
 	r := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:  []string{"notification-kafka:9092"},
+		Brokers:  []string{"kafka:9092"},
 		GroupID:  "consumer-group-1",
 		Topic:    "email-notification",
 		MinBytes: 10e3, // 10KB
@@ -54,11 +54,11 @@ func handleMessage(str []byte) error {
 
 	switch msg.Channel {
 	case "email":
-		err = sendEmail(msg.Address, msg.Message)
+		return sendEmail(msg.Address, msg.Message)
 	case "sms":
-		err = errors.New("sms not implemented")
+		return errors.New("sms not implemented")
 	}
-	return err
+	return nil
 }
 
 func sendEmail(addr, text string) error {
