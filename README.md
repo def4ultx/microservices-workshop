@@ -1,6 +1,6 @@
-# FutureSkill Microservices Workshop
+# Microservices Workshop
 
-E-commerce microservices example
+E-commerce microservices example for online course at [FutureSkill](https://futureskill.co)
 
 ## User Journey
 
@@ -35,3 +35,7 @@ E-commerce microservices example
 ## Architecture
 
 ![Architecture](./architecture.png "Architecture")
+
+## Workshop 1
+
+## Workshop 2
