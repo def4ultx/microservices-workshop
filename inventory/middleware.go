@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -50,7 +49,6 @@ func loggingMiddleware(next http.Handler) http.Handler {
 			"statuscode": recorder.Status,
 			"elapsed":    elapsed.Milliseconds(),
 		}).Info("Incoming request")
-		fmt.Println("logging2", recorder.Status)
 	})
 }
 
