@@ -1,0 +1,31 @@
+version: '3.5'
+
+services:
+  fluentd:
+    image: def4ultx/fluentd
+    volumes:
+      - ./etc/fluentd:/fluentd/etc
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+    networks:
+      - workshop-example
+
+  elasticsearch:
+    image: elasticsearch:5.0
+    expose:
+      - 9200
+    ports:
+      - 9200:9200
+    networks:
+      - workshop-example
+
+  kibana:
+    image: kibana:5.0
+    ports:
+      - 5601:5601
+    networks:
+      - workshop-example
+
+networks:
+  workshop-example:

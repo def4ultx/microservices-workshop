@@ -1,0 +1,52 @@
+version: '3.5'
+
+services:
+  inventory-api:
+    image: def4ultx/inventory-api
+    depends_on:
+      - inventory-crdb
+    ports:
+      - 8080:8080
+    networks:
+      - workshop-example
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: localhost:24224
+
+  inventory-crdb:
+    image: cockroachdb/cockroach:v20.2.8
+    ports:
+      - 8081:8080
+      - 26257:26257
+    command: start-single-node --insecure
+    networks:
+      - workshop-example
+
+  order-api:
+    image: def4ultx/order-api
+    depends_on:
+      - order-mongodb
+    ports:
+      - 8082:8080
+    networks:
+      - workshop-example
+
+  order-mongodb:
+    image : mongo
+    ports:
+    - 27017:27017
+    networks:
+      - workshop-example
+  
+  mongo-express:
+    image: mongo-express:0.54
+    ports:
+      - 8083:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: order-mongodb
+    networks:
+      - workshop-example
+
+networks:
+  workshop-example:

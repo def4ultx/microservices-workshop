@@ -1,0 +1,28 @@
+version: '3.5'
+
+services:
+  grafana:
+    image: grafana/grafana:6.5.0
+    container_name: grafana
+    ports:
+      - 3000:3000
+    networks:
+      - workshop-example
+
+  prometheus:
+    image: prom/prometheus:v2.21.0
+    volumes:
+      - ./etc/prometheus/:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - 9090:9090
+    restart: always
+    networks:
+      - workshop-example
+
+networks:
+  workshop-example:

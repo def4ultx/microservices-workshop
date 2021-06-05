@@ -1,0 +1,36 @@
+version: '3.5'
+
+services:
+  account-api:
+    image: def4ultx/account-api
+    ports:
+      - 8084:8080
+    networks:
+      - workshop-example
+
+  payment-api:
+    image: def4ultx/payment-api
+    ports:
+      - 8085:8080
+    networks:
+      - workshop-example
+
+  notification-consumer:
+    image: def4ultx/notification-consumer
+    networks:
+      - workshop-example
+
+  shipping-api:
+    image: def4ultx/shipping-api
+    ports:
+      - 8086:8080
+    networks:
+      - workshop-example
+
+  shipping-consumer:
+    image: def4ultx/shipping-consumer
+    networks:
+      - workshop-example
+
+networks:
+  workshop-example:
