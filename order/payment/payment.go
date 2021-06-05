@@ -37,11 +37,11 @@ type ChargeRequest struct {
 }
 
 type ChargeResponse struct {
+	ID     int    `json:"id"`
 	Status string `json:"status"`
 }
 
-func (c *Client) ChargeCreditCard(amount int, card CreditCard) error {
-
+func (c *Client) ChargeCreditCard(amount int, card CreditCard) (int, error) {
 	body := ChargeRequest{
 		Method:     "CreditCard",
 		CreditCard: card,
@@ -51,36 +51,37 @@ func (c *Client) ChargeCreditCard(amount int, card CreditCard) error {
 	buffer := bytes.NewBuffer(nil)
 	err := json.NewEncoder(buffer).Encode(&body)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	req, err := http.NewRequest(http.MethodPost, "http://payment:8080/payment/charge", buffer)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	defer resp.Body.Close()
 
 	var result ChargeResponse
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	io.Copy(ioutil.Discard, resp.Body)
 
 	if result.Status != "Success" {
-		return errors.New("error from payment api")
+		return 0, errors.New("error from payment api")
 	}
 
-	return nil
+	return result.ID, nil
 }
 
 type PaymentDetail struct {
+	ID     int    `json:"id"`
 	Method string `json:"method"`
 	Status string `json:"status"`
 }
