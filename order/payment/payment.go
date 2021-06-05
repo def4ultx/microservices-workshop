@@ -54,7 +54,7 @@ func (c *Client) ChargeCreditCard(amount int, card CreditCard) (int, error) {
 		return 0, err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, "http://payment:8080/payment/charge", buffer)
+	req, err := http.NewRequest(http.MethodPost, "http://payment-api:8080/payment/charge", buffer)
 	if err != nil {
 		return 0, err
 	}
@@ -87,7 +87,7 @@ type PaymentDetail struct {
 }
 
 func (c *Client) GetPaymentDetail(id string) (*PaymentDetail, error) {
-	url := "http://payment:8080/payment/charge/" + id
+	url := "http://payment:8080/payment-api/charge/" + id
 	resp, err := c.httpClient.Get(url)
 	if err != nil {
 		return nil, err
