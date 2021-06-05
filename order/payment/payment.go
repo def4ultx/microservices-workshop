@@ -32,6 +32,7 @@ type CreditCard struct {
 
 type ChargeRequest struct {
 	Method     string     `json:"method"`
+	Amount     int        `json:"amount"`
 	CreditCard CreditCard `json:"creditCard"`
 }
 
@@ -39,11 +40,12 @@ type ChargeResponse struct {
 	Status string `json:"status"`
 }
 
-func (c *Client) ChargeCreditCard(card CreditCard) error {
+func (c *Client) ChargeCreditCard(amount int, card CreditCard) error {
 
 	body := ChargeRequest{
 		Method:     "CreditCard",
 		CreditCard: card,
+		Amount:     amount,
 	}
 
 	buffer := bytes.NewBuffer(nil)
