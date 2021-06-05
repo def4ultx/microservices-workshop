@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -24,8 +25,8 @@ type CartResponse struct {
 	Products []Product `json:"products"`
 }
 
-func (c *Client) GetCartProducts(id string) ([]Product, error) {
-	url := "http://inventory-api:8080/cart/" + id
+func (c *Client) GetCartProducts(id int) ([]Product, error) {
+	url := "http://inventory-api:8080/cart/" + strconv.Itoa(id)
 	resp, err := c.httpClient.Get(url)
 	if err != nil {
 		return nil, err
