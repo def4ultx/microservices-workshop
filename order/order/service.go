@@ -6,9 +6,8 @@ import (
 )
 
 type Service interface {
-	CreateOrder(request CreateOrder) (string, error)
-	GetOrderDetailByID(id string) (OrderDetail, error)
-	ListOrderByUserID()
+	CreateOrder(CreateOrder) (string, error)
+	GetOrderDetailByID(id string) (*OrderDetail, error)
 }
 
 type service struct {
@@ -52,6 +51,20 @@ func (s *service) CreateOrder(order CreateOrder) (string, error) {
 	return orderId, nil
 
 }
+func (s *service) GetOrderDetailByID(id string) (*OrderDetail, error) {
+	// order, err := s.orderRepository.GetOrderByID(id)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-type OrderDetail struct {
+	// detail, err := s.paymentClient.GetPaymentDetail(order.Payment.ID)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// shipping, err := s.shippingClient.GetShippingInfo(id)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	return nil, nil
 }

@@ -2,6 +2,7 @@ package order
 
 import (
 	"order/inventory"
+	"order/payment"
 )
 
 type Order struct {
@@ -11,4 +12,16 @@ type Order struct {
 	TotalAmount int
 	Products    []inventory.Product
 	PaymentID   int
+}
+
+type OrderDetail struct {
+	OrderID     string                `json:"orderId"`
+	Status      string                `json:"status"`
+	TotalAmount int                   `json:"totalAmount"`
+	Products    []inventory.Product   `json:"products"`
+	Payment     payment.PaymentDetail `json:"payment"`
+	Shipping    struct {
+		Address string `json:"address"`
+		Status  string `json:"status"`
+	} `json:"shipping"`
 }

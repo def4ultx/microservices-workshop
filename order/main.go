@@ -3,16 +3,78 @@ package main
 import (
 	"context"
 	"net/http"
+	"order/inventory"
+	"order/middleware"
+	"order/order"
+	"order/payment"
 	"os"
 	"os/signal"
 	"time"
 
+	fluent "github.com/evalphobia/logrus_fluent"
+	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func main() {
 	log.Info("Starting the service")
-	StartServer(nil)
+	setupLogger()
+
+	mongoClient := connectDB()
+	defer disconnectMongo(mongoClient)
+
+	inventoryClient := inventory.NewClient()
+	paymentClient := payment.NewClient()
+
+	r := mux.NewRouter()
+	r.Use(middleware.Logging, middleware.Metric, middleware.Recover)
+	r.Path("/prometheus").Handler(promhttp.Handler())
+
+	o := order.NewHandler(inventoryClient, paymentClient, mongoClient)
+	r.HandleFunc("/order", o.CreateOrder).Methods(http.MethodPost)
+	r.HandleFunc("/order/{id}", o.GetOrderByID).Methods(http.MethodGet)
+	r.HandleFunc("/orders", o.GetUserOrders).Methods(http.MethodGet)
+
+	StartServer(r)
+}
+
+func setupLogger() {
+	log.SetFormatter(&log.TextFormatter{})
+	hook, err := fluent.NewWithConfig(fluent.Config{
+		Host: "fluentd",
+		Port: 24224,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	hook.SetTag("original.tag")
+	hook.SetMessageField("message")
+	log.AddHook(hook)
+}
+
+func connectDB() *mongo.Client {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://mongodb:27017"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return client
+}
+
+func disconnectMongo(client *mongo.Client) {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	err := client.Disconnect(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func StartServer(r http.Handler) {

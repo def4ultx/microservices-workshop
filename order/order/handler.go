@@ -5,13 +5,21 @@ import (
 	"fmt"
 	"net/http"
 	"order/api"
+	"order/inventory"
 	"order/payment"
 
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Handler struct {
 	svc Service
+}
+
+func NewHandler(i *inventory.Client, pc *payment.Client, db *mongo.Client) *Handler {
+	repo := NewRepository(db)
+	svc := &service{i, pc, repo}
+	return &Handler{svc}
 }
 
 type CreateOrderRequest struct {
@@ -25,7 +33,7 @@ type OrderPaymentRequest struct {
 	CreditCard payment.CreditCard `json:"creditCard"`
 }
 
-func (h *Handler) CreateOrderHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	var req CreateOrderRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -54,22 +62,22 @@ func (h *Handler) CreateOrderHandler(w http.ResponseWriter, r *http.Request) {
 	api.WriteSuccessResponse(w, &resp)
 }
 
-func (h *Handler) GetOrderHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetOrderByID(w http.ResponseWriter, r *http.Request) {
 	id, ok := mux.Vars(r)["id"]
 	if !ok {
 		api.WriteErrorResponse(w, http.StatusBadRequest)
 		return
 	}
 
-	order, err := h.svc.GetOrderDetailByID(id)
+	detail, err := h.svc.GetOrderDetailByID(id)
 	if err != nil {
 		api.WriteErrorResponse(w, http.StatusInternalServerError)
 		return
 	}
 
-	api.WriteSuccessResponse(w, order)
+	api.WriteSuccessResponse(w, detail)
 }
 
-func (h *Handler) ListOrderHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetUserOrders(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "not implemented")
 }
