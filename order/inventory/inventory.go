@@ -20,13 +20,6 @@ func NewClient() *Client {
 	return &Client{httpClient}
 }
 
-type Product struct {
-	ID     int64  `json:"id"`
-	Name   string `json:"name"`
-	Price  int    `json:"price"`
-	Amount int    `json:"amount"`
-}
-
 type CartResponse struct {
 	Products []Product `json:"products"`
 }
