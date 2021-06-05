@@ -65,7 +65,7 @@ Response
     },
     "shipping": {
         "address": "111/11",
-        "status": "Completed",
+        "status": "Completed"
     }
 }
 ```
