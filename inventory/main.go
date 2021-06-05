@@ -16,18 +16,7 @@ import (
 
 func main() {
 	log.Info("Starting the service")
-	log.SetFormatter(&log.TextFormatter{})
-	hook, err := fluent.NewWithConfig(fluent.Config{
-		Host: "fluentd",
-		Port: 24224,
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-	hook.SetTag("original.tag")
-	hook.SetMessageField("message")
-	log.AddHook(hook)
-
+	setupLogger()
 	db := setupDB()
 
 	r := createRouter(db)
@@ -62,6 +51,20 @@ func main() {
 
 	log.Info("shutting down")
 	os.Exit(0)
+}
+
+func setupLogger() {
+	log.SetFormatter(&log.TextFormatter{})
+	hook, err := fluent.NewWithConfig(fluent.Config{
+		Host: "fluentd",
+		Port: 24224,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	hook.SetTag("original.tag")
+	hook.SetMessageField("message")
+	log.AddHook(hook)
 }
 
 func setupDB() *pgxpool.Pool {
