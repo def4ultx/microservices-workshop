@@ -18,6 +18,7 @@ Request
 ```json
 {
     "method": "CreditCard",
+    "amount": "10000",
     "creditCard": {
         "number": "4111111111111111",
         "expiryMonth": "03",
@@ -32,6 +33,7 @@ Response
 
 ```json
 {
+    "id": 1234,
     "status": "Success"
 }
 ```
@@ -42,6 +44,7 @@ Response
 
 ```json
 {
+    "id": 1234,
     "method": "CreditCard",
     "status": "Success",
     "creditCard": {

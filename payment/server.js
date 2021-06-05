@@ -15,12 +15,16 @@ app.listen(8080, () => {
 })
 
 async function chargePayment(req, res) {
-    const body = { status: "Success" }
+    const body = { 
+        id: 1234,
+        status: "Success"
+    }
     res.status(200).send(body)
 }
 
 async function viewPaymentDetail(req, res) {
     const body = { 
+        id: 1234,
         method: "CreditCard",
         status: "Success",
         creditCard: {
