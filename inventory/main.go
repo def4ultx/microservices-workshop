@@ -2,22 +2,37 @@ package main
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
+	fluent "github.com/evalphobia/logrus_fluent"
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
-	log.Println("Starting the service")
+	log.Info("Starting the service")
+	log.SetFormatter(&log.TextFormatter{})
+	hook, err := fluent.NewWithConfig(fluent.Config{
+		Host: "fluentd",
+		Port: 24224,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	hook.SetTag("original.tag")
+	hook.SetMessageField("message")
+	log.AddHook(hook)
 
 	db := setupDB()
 
 	r := createRouter(db)
+	r.Path("/prometheus").Handler(promhttp.Handler())
+
 	srv := &http.Server{
 		Addr:         "0.0.0.0:8080",
 		WriteTimeout: time.Second * 15,
@@ -27,9 +42,9 @@ func main() {
 	}
 
 	go func() {
-		log.Println("The service is ready to listen and serve.")
+		log.Info("The service is ready to listen and serve.")
 		if err := srv.ListenAndServe(); err != nil {
-			log.Println(err)
+			log.Fatal(err)
 		}
 	}()
 
@@ -42,16 +57,16 @@ func main() {
 	defer cancel()
 	err := srv.Shutdown(ctx)
 	if err != nil {
-		log.Println("error occur while shutting down", err)
+		log.Fatal("error occur while shutting down", err)
 	}
 
-	log.Println("shutting down")
+	log.Info("shutting down")
 	os.Exit(0)
 }
 
 func setupDB() *pgxpool.Pool {
 
-	config, err := pgxpool.ParseConfig("postgres://root:password@localhost:26257/defaultdb?sslmode=disable")
+	config, err := pgxpool.ParseConfig("postgres://root:password@inventory-crdb:26257/defaultdb?sslmode=disable")
 	if err != nil {
 		log.Fatal("error configuring the database: ", err)
 	}
@@ -98,6 +113,7 @@ func setupDB() *pgxpool.Pool {
 func createRouter(db *pgxpool.Pool) *mux.Router {
 
 	r := mux.NewRouter()
+	r.Use(loggingMiddleware, metricMiddleware, recoverMiddleware)
 
 	product := ProductHandler{db}
 	r.HandleFunc("/products/recommendations", product.GetRecommendations).Methods(http.MethodGet)
