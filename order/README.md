@@ -29,7 +29,7 @@ Request
             "cvc": "737",
             "holderName": "John Smith"
         }
-    },
+    }
 }
 ```
 
@@ -37,7 +37,7 @@ Response
 
 ```json
 {
-    "orderId": 12345,
+    "orderId": "12345",
     "status": "Success"
 }
 ```
@@ -48,7 +48,7 @@ Response
 
 ```json
 {
-    "orderId": 12345,
+    "orderId": "12345",
     "status": "Completed",
     "totalAmount": 2990000,
     "products": [
@@ -78,7 +78,7 @@ Response
 {
     "orders": [
         {
-            "orderId": 12345,
+            "orderId": "12345",
             "status": "Completed",
             "totalAmount": 2990000,
             "products": [
