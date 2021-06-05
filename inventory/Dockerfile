@@ -8,8 +8,7 @@ ADD go.sum /build
 RUN go mod download
 
 ADD . /build
-
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o /build/api .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /build/api .
 
 FROM alpine
 
