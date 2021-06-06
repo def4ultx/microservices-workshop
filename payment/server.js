@@ -7,7 +7,7 @@ app.use(bodyParser.json())
 
 // register routes
 app.post('/payment/charge', chargePayment)
-app.get('/payment/charge', viewPaymentDetail)
+app.get('/payment/charge/:userId', viewPaymentDetail)
 
 // listen for requests
 app.listen(8080, () => {
