@@ -3,15 +3,17 @@ package handler
 import (
 	"log"
 	"order/inventory"
+	"order/notification"
 	"order/payment"
 	"order/shipping"
 )
 
 type OrderService struct {
-	InventoryClient *inventory.Client
-	PaymentClient   *payment.Client
-	ShippingClient  *shipping.Client
-	OrderRepository *OrderRepository
+	InventoryClient    *inventory.Client
+	PaymentClient      *payment.Client
+	ShippingClient     *shipping.Client
+	NotificationClient *notification.Client
+	OrderRepository    *OrderRepository
 }
 
 type CreateOrder struct {
@@ -44,7 +46,7 @@ func (s *OrderService) CreateOrder(order CreateOrder) (string, error) {
 		return "", err
 	}
 
-	// push message to noti/shipping topic
+	_ = s.NotificationClient.SendEmail("test@futureskill.co", "Hello from workshop.")
 
 	return orderId, nil
 

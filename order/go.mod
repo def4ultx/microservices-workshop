@@ -7,7 +7,10 @@ require (
 	github.com/fluent/fluent-logger-golang v1.6.1 // indirect
 	github.com/google/uuid v1.0.0
 	github.com/gorilla/mux v1.8.0
+	github.com/klauspost/compress v1.13.0 // indirect
+	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
 	github.com/prometheus/client_golang v1.10.0
+	github.com/segmentio/kafka-go v0.4.16
 	github.com/sirupsen/logrus v1.8.1
 	github.com/tinylib/msgp v1.1.5 // indirect
 	go.mongodb.org/mongo-driver v1.5.3

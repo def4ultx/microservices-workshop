@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"order/api"
 	"order/inventory"
+	"order/notification"
 	"order/payment"
 	"order/shipping"
 	"strconv"
@@ -17,9 +18,9 @@ type OrderHandler struct {
 	svc *OrderService
 }
 
-func NewOrderHandler(i *inventory.Client, p *payment.Client, s *shipping.Client, db *mongo.Client) *OrderHandler {
+func NewOrderHandler(i *inventory.Client, p *payment.Client, s *shipping.Client, n *notification.Client, db *mongo.Client) *OrderHandler {
 	repo := NewOrderRepository(db)
-	svc := &OrderService{i, p, s, repo}
+	svc := &OrderService{i, p, s, n, repo}
 	return &OrderHandler{svc: svc}
 }
 
