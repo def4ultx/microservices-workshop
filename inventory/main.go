@@ -21,7 +21,7 @@ func main() {
 
 	r := createRouter(db)
 	r.Path("/prometheus").Handler(promhttp.Handler())
-	r.Handle("/healthz", http.HandlerFunc(handler.HealthCheck))
+	r.Handle("/healthz", http.HandlerFunc(healthCheckHandler))
 
 	srv := &http.Server{
 		Addr:         "0.0.0.0:8080",
@@ -61,7 +61,8 @@ func setupLogger() {
 		Port: 24224,
 	})
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
+		return
 	}
 	hook.SetTag("original.tag")
 	hook.SetMessageField("message")
@@ -136,7 +137,7 @@ func createRouter(db *pgxpool.Pool) *mux.Router {
 	return r
 }
 
-func HealthCheck(w http.ResponseWriter, _ *http.Request) {
+func healthCheckHandler(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`OK`))
 }
