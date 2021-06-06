@@ -9,10 +9,6 @@ services:
       - 8080:8080
     networks:
       - workshop-example
-    # logging:
-    #   driver: fluentd
-    #   options:
-    #     fluentd-address: localhost:24224
 
   inventory-crdb:
     image: cockroachdb/cockroach:v20.2.8
