@@ -27,10 +27,5 @@ services:
     networks:
       - workshop-example
 
-  shipping-consumer:
-    image: def4ultx/shipping-consumer
-    networks:
-      - workshop-example
-
 networks:
   workshop-example:
