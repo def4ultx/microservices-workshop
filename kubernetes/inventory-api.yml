@@ -1,0 +1,42 @@
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-api-service
+spec:
+  type: NodePort
+  selector:
+    app: inventory-api
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30000
+---
+# deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-api-deployment
+  labels:
+    app: inventory-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: inventory-api
+  template:
+    metadata:
+      labels:
+        app: inventory-api
+    spec:
+      containers:
+      - name: inventory-api
+        image: def4ultx/inventory-api
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 3
