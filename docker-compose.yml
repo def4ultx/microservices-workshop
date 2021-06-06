@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   inventory-api:
-    image: def4ultx/inventory-api
+    image: microservice-worhshop/inventory-api
     depends_on:
       - inventory-crdb
     ports:
@@ -20,7 +20,7 @@ services:
       - workshop-example
 
   order-api:
-    image: def4ultx/order-api
+    image: microservice-worhshop/order-api
     depends_on:
       - order-mongodb
     ports:

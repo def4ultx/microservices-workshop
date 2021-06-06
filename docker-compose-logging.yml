@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   fluentd:
-    image: def4ultx/fluentd
+    image: microservice-worhshop/fluentd
     volumes:
       - ./etc/fluentd:/fluentd/etc
     ports:
