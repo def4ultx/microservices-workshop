@@ -1,13 +1,15 @@
 package order
 
 import (
+	"log"
 	"order/inventory"
 	"order/payment"
 )
 
 type Service interface {
 	CreateOrder(CreateOrder) (string, error)
-	GetOrderDetailByID(id string) (*OrderDetail, error)
+	GetOrderDetailByID(string) (*OrderDetail, error)
+	GetUserOrders(int) ([]Order, error)
 }
 
 type service struct {
@@ -46,25 +48,43 @@ func (s *service) CreateOrder(order CreateOrder) (string, error) {
 		return "", err
 	}
 
-	// push message to noti topic
+	// push message to noti/shipping topic
 
 	return orderId, nil
 
 }
-func (s *service) GetOrderDetailByID(id string) (*OrderDetail, error) {
-	// order, err := s.orderRepository.GetOrderByID(id)
-	// if err != nil {
-	// 	return nil, err
-	// }
 
-	// detail, err := s.paymentClient.GetPaymentDetail(order.Payment.ID)
-	// if err != nil {
-	// 	return nil, err
-	// }
+func (s *service) GetOrderDetailByID(id string) (*OrderDetail, error) {
+	order, err := s.orderRepository.GetOrderByID(id)
+	if err != nil {
+		log.Println("1", err)
+		return nil, err
+	}
+
+	payment, err := s.paymentClient.GetPaymentDetail(order.PaymentID)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
 	// shipping, err := s.shippingClient.GetShippingInfo(id)
 	// if err != nil {
 	// 	return nil, err
 	// }
-	return nil, nil
+	resp := OrderDetail{
+		OrderID:     order.OrderID,
+		Status:      order.Status,
+		TotalAmount: order.TotalAmount,
+		Products:    order.Products,
+		Payment:     *payment,
+	}
+	return &resp, nil
+}
+
+func (s *service) GetUserOrders(id int) ([]Order, error) {
+	orders, err := s.orderRepository.GetOrdersByUserID(id)
+	if err != nil {
+		return nil, err
+	}
+	return orders, nil
 }

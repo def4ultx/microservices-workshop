@@ -6,12 +6,12 @@ import (
 )
 
 type Order struct {
-	ID          string
-	UserID      int
+	OrderID     string
 	Status      string
+	UserID      int
+	PaymentID   int
 	TotalAmount int
 	Products    []inventory.Product
-	PaymentID   int
 }
 
 type OrderDetail struct {

@@ -2,11 +2,11 @@ package order
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"order/api"
 	"order/inventory"
 	"order/payment"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -19,7 +19,7 @@ type Handler struct {
 func NewHandler(i *inventory.Client, pc *payment.Client, db *mongo.Client) *Handler {
 	repo := NewRepository(db)
 	svc := &service{i, pc, repo}
-	return &Handler{svc}
+	return &Handler{svc: svc}
 }
 
 type CreateOrderRequest struct {
@@ -79,5 +79,23 @@ func (h *Handler) GetOrderByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetUserOrders(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "not implemented")
+	id, ok := mux.Vars(r)["userId"]
+	if !ok {
+		api.WriteErrorResponse(w, http.StatusBadRequest)
+		return
+	}
+
+	userId, err := strconv.Atoi(id)
+	if err != nil {
+		api.WriteErrorResponse(w, http.StatusBadRequest)
+		return
+	}
+
+	orders, err := h.svc.GetUserOrders(userId)
+	if err != nil {
+		api.WriteErrorResponse(w, http.StatusInternalServerError)
+		return
+	}
+
+	api.WriteSuccessResponse(w, orders)
 }
