@@ -14,7 +14,7 @@ func main() {
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:  []string{"kafka:9092"},
 		GroupID:  "consumer-group-1",
-		Topic:    "email-notification",
+		Topic:    "notification",
 		MinBytes: 10e3, // 10KB
 		MaxBytes: 10e6, // 10MB
 	})
