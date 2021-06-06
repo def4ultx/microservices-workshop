@@ -36,7 +36,7 @@ func main() {
 	o := order.NewHandler(inventoryClient, paymentClient, mongoClient)
 	r.HandleFunc("/order", o.CreateOrder).Methods(http.MethodPost)
 	r.HandleFunc("/order/{id}", o.GetOrderByID).Methods(http.MethodGet)
-	r.HandleFunc("/orders", o.GetUserOrders).Methods(http.MethodGet)
+	r.HandleFunc("/orders/{userId}", o.GetUserOrders).Methods(http.MethodGet)
 
 	StartServer(r)
 }
@@ -59,7 +59,7 @@ func connectDB() *mongo.Client {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://mongodb:27017"))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://order-mongodb:27017"))
 	if err != nil {
 		log.Fatal(err)
 	}
