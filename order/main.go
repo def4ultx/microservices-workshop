@@ -53,7 +53,8 @@ func setupLogger() {
 		Port: 24224,
 	})
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
+		return
 	}
 	hook.SetTag("original.tag")
 	hook.SetMessageField("message")
