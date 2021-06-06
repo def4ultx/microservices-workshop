@@ -5,6 +5,7 @@ go 1.14
 require (
 	github.com/evalphobia/logrus_fluent v0.5.4
 	github.com/fluent/fluent-logger-golang v1.6.1 // indirect
+	github.com/google/uuid v1.0.0
 	github.com/gorilla/mux v1.8.0
 	github.com/prometheus/client_golang v1.10.0
 	github.com/sirupsen/logrus v1.8.1
