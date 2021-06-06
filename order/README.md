@@ -10,7 +10,7 @@ Method      | URI                           | Description                       
 ----------- | ----------------------------- | ------------------------------------- |
 `POST`      | /order                        | Create new order                      |
 `GET`       | /order/{id}                   | View order information                |
-`GET`       | /orders                       | List customer's orders                |
+`GET`       | /orders/{userId}              | List customer's orders                |
 
 #### POST /order
 
