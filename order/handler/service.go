@@ -4,11 +4,13 @@ import (
 	"log"
 	"order/inventory"
 	"order/payment"
+	"order/shipping"
 )
 
 type OrderService struct {
 	InventoryClient *inventory.Client
 	PaymentClient   *payment.Client
+	ShippingClient  *shipping.Client
 	OrderRepository *OrderRepository
 }
 
@@ -61,10 +63,10 @@ func (s *OrderService) GetOrderDetailByID(id string) (*OrderDetail, error) {
 		return nil, err
 	}
 
-	// shipping, err := s.shippingClient.GetShippingInfo(id)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	shipping, err := s.ShippingClient.GetShippingInfo(id)
+	if err != nil {
+		return nil, err
+	}
 	resp := OrderDetail{
 		OrderID:     order.OrderID,
 		Status:      order.Status,
@@ -72,6 +74,8 @@ func (s *OrderService) GetOrderDetailByID(id string) (*OrderDetail, error) {
 		Products:    order.Products,
 		Payment:     *payment,
 	}
+	resp.Shipping.Address = shipping.Address
+	resp.Shipping.Status = shipping.Status
 	return &resp, nil
 }
 

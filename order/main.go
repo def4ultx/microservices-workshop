@@ -7,6 +7,7 @@ import (
 	"order/inventory"
 	"order/middleware"
 	"order/payment"
+	"order/shipping"
 	"os"
 	"os/signal"
 	"time"
@@ -28,12 +29,13 @@ func main() {
 
 	inventoryClient := inventory.NewClient()
 	paymentClient := payment.NewClient()
+	shippingClient := shipping.NewClient()
 
 	r := mux.NewRouter()
 	r.Use(middleware.Logging, middleware.Metric, middleware.Recover)
 	r.Path("/prometheus").Handler(promhttp.Handler())
 
-	o := handler.NewOrderHandler(inventoryClient, paymentClient, mongoClient)
+	o := handler.NewOrderHandler(inventoryClient, paymentClient, shippingClient, mongoClient)
 	r.HandleFunc("/order", o.CreateOrder).Methods(http.MethodPost)
 	r.HandleFunc("/order/{id}", o.GetOrderByID).Methods(http.MethodGet)
 	r.HandleFunc("/orders/{userId}", o.GetUserOrders).Methods(http.MethodGet)

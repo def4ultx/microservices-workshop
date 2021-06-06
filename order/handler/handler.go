@@ -6,6 +6,7 @@ import (
 	"order/api"
 	"order/inventory"
 	"order/payment"
+	"order/shipping"
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -16,9 +17,9 @@ type OrderHandler struct {
 	svc *OrderService
 }
 
-func NewOrderHandler(i *inventory.Client, pc *payment.Client, db *mongo.Client) *OrderHandler {
+func NewOrderHandler(i *inventory.Client, p *payment.Client, s *shipping.Client, db *mongo.Client) *OrderHandler {
 	repo := NewOrderRepository(db)
-	svc := &OrderService{i, pc, repo}
+	svc := &OrderService{i, p, s, repo}
 	return &OrderHandler{svc: svc}
 }
 
