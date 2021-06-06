@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -86,8 +87,8 @@ type PaymentDetail struct {
 	Status string `json:"status"`
 }
 
-func (c *Client) GetPaymentDetail(id string) (*PaymentDetail, error) {
-	url := "http://payment:8080/payment-api/charge/" + id
+func (c *Client) GetPaymentDetail(id int) (*PaymentDetail, error) {
+	url := "http://payment-api:8080/payment/charge/" + strconv.Itoa(id)
 	resp, err := c.httpClient.Get(url)
 	if err != nil {
 		return nil, err
