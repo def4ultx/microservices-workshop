@@ -12,28 +12,26 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Handler struct {
-	svc Service
+type OrderHandler struct {
+	svc *OrderService
 }
 
-func NewHandler(i *inventory.Client, pc *payment.Client, db *mongo.Client) *Handler {
-	repo := NewRepository(db)
-	svc := &service{i, pc, repo}
-	return &Handler{svc: svc}
+func NewOrderHandler(i *inventory.Client, pc *payment.Client, db *mongo.Client) *OrderHandler {
+	repo := NewOrderRepository(db)
+	svc := &OrderService{i, pc, repo}
+	return &OrderHandler{svc: svc}
 }
 
 type CreateOrderRequest struct {
-	CartID  int                 `json:"cartId"`
-	UserID  int                 `json:"userId"`
-	Payment OrderPaymentRequest `json:"payment"`
+	CartID  int `json:"cartId"`
+	UserID  int `json:"userId"`
+	Payment struct {
+		Method     string             `json:"method"`
+		CreditCard payment.CreditCard `json:"creditCard"`
+	} `json:"payment"`
 }
 
-type OrderPaymentRequest struct {
-	Method     string             `json:"method"`
-	CreditCard payment.CreditCard `json:"creditCard"`
-}
-
-func (h *Handler) CreateOrder(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	var req CreateOrderRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -62,7 +60,7 @@ func (h *Handler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 	api.WriteSuccessResponse(w, &resp)
 }
 
-func (h *Handler) GetOrderByID(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) GetOrderByID(w http.ResponseWriter, r *http.Request) {
 	id, ok := mux.Vars(r)["id"]
 	if !ok {
 		api.WriteErrorResponse(w, http.StatusBadRequest)
@@ -78,7 +76,7 @@ func (h *Handler) GetOrderByID(w http.ResponseWriter, r *http.Request) {
 	api.WriteSuccessResponse(w, detail)
 }
 
-func (h *Handler) GetUserOrders(w http.ResponseWriter, r *http.Request) {
+func (h *OrderHandler) GetUserOrders(w http.ResponseWriter, r *http.Request) {
 	id, ok := mux.Vars(r)["userId"]
 	if !ok {
 		api.WriteErrorResponse(w, http.StatusBadRequest)

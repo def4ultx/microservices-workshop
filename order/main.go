@@ -33,7 +33,7 @@ func main() {
 	r.Use(middleware.Logging, middleware.Metric, middleware.Recover)
 	r.Path("/prometheus").Handler(promhttp.Handler())
 
-	o := order.NewHandler(inventoryClient, paymentClient, mongoClient)
+	o := order.NewOrderHandler(inventoryClient, paymentClient, mongoClient)
 	r.HandleFunc("/order", o.CreateOrder).Methods(http.MethodPost)
 	r.HandleFunc("/order/{id}", o.GetOrderByID).Methods(http.MethodGet)
 	r.HandleFunc("/orders/{userId}", o.GetUserOrders).Methods(http.MethodGet)

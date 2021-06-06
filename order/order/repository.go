@@ -9,23 +9,17 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type Repository interface {
-	InsertOrder(Order) (string, error)
-	GetOrderByID(string) (*Order, error)
-	GetOrdersByUserID(int) ([]Order, error)
+type OrderRepository struct {
+	MongoClient *mongo.Client
 }
 
-type repository struct {
-	mongoClient *mongo.Client
-}
-
-func NewRepository(client *mongo.Client) *repository {
-	return &repository{
-		mongoClient: client,
+func NewOrderRepository(client *mongo.Client) *OrderRepository {
+	return &OrderRepository{
+		MongoClient: client,
 	}
 }
 
-func (r *repository) InsertOrder(order Order) (string, error) {
+func (r *OrderRepository) InsertOrder(order Order) (string, error) {
 	ctx := context.Background()
 
 	products := make([]bson.M, len(order.Products))
@@ -48,7 +42,7 @@ func (r *repository) InsertOrder(order Order) (string, error) {
 		"products":    products,
 	}
 
-	_, err := r.mongoClient.Database("workshop").Collection("orders").InsertOne(ctx, doc)
+	_, err := r.MongoClient.Database("workshop").Collection("orders").InsertOne(ctx, doc)
 	if err != nil {
 		return "", err
 	}
@@ -56,11 +50,11 @@ func (r *repository) InsertOrder(order Order) (string, error) {
 	return orderID, nil
 }
 
-func (r *repository) GetOrderByID(id string) (*Order, error) {
+func (r *OrderRepository) GetOrderByID(id string) (*Order, error) {
 	ctx := context.Background()
 
 	filter := bson.M{"orderId": id}
-	result := r.mongoClient.Database("workshop").Collection("orders").FindOne(ctx, filter)
+	result := r.MongoClient.Database("workshop").Collection("orders").FindOne(ctx, filter)
 	order := struct {
 		OrderID     string `bson:"orderId"`
 		Status      string `bson:"status"`
@@ -100,11 +94,11 @@ func (r *repository) GetOrderByID(id string) (*Order, error) {
 	return &o, nil
 }
 
-func (r *repository) GetOrdersByUserID(id int) ([]Order, error) {
+func (r *OrderRepository) GetOrdersByUserID(id int) ([]Order, error) {
 	ctx := context.Background()
 
 	filter := bson.M{"userId": id}
-	cursor, err := r.mongoClient.Database("workshop").Collection("orders").Find(ctx, filter)
+	cursor, err := r.MongoClient.Database("workshop").Collection("orders").Find(ctx, filter)
 	if err != nil {
 		return nil, err
 	}

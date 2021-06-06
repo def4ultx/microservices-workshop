@@ -6,16 +6,10 @@ import (
 	"order/payment"
 )
 
-type Service interface {
-	CreateOrder(CreateOrder) (string, error)
-	GetOrderDetailByID(string) (*OrderDetail, error)
-	GetUserOrders(int) ([]Order, error)
-}
-
-type service struct {
-	inventoryClient *inventory.Client
-	paymentClient   *payment.Client
-	orderRepository Repository
+type OrderService struct {
+	InventoryClient *inventory.Client
+	PaymentClient   *payment.Client
+	OrderRepository *OrderRepository
 }
 
 type CreateOrder struct {
@@ -24,14 +18,14 @@ type CreateOrder struct {
 	CreditCard payment.CreditCard
 }
 
-func (s *service) CreateOrder(order CreateOrder) (string, error) {
-	products, err := s.inventoryClient.GetCartProducts(order.CartID)
+func (s *OrderService) CreateOrder(order CreateOrder) (string, error) {
+	products, err := s.InventoryClient.GetCartProducts(order.CartID)
 	if err != nil {
 		return "", err
 	}
 	totalAmount := inventory.GetTotalAmount(products)
 
-	paymentID, err := s.paymentClient.ChargeCreditCard(totalAmount, order.CreditCard)
+	paymentID, err := s.PaymentClient.ChargeCreditCard(totalAmount, order.CreditCard)
 	if err != nil {
 		return "", err
 	}
@@ -43,7 +37,7 @@ func (s *service) CreateOrder(order CreateOrder) (string, error) {
 		Products:    products,
 		PaymentID:   paymentID,
 	}
-	orderId, err := s.orderRepository.InsertOrder(o)
+	orderId, err := s.OrderRepository.InsertOrder(o)
 	if err != nil {
 		return "", err
 	}
@@ -54,14 +48,14 @@ func (s *service) CreateOrder(order CreateOrder) (string, error) {
 
 }
 
-func (s *service) GetOrderDetailByID(id string) (*OrderDetail, error) {
-	order, err := s.orderRepository.GetOrderByID(id)
+func (s *OrderService) GetOrderDetailByID(id string) (*OrderDetail, error) {
+	order, err := s.OrderRepository.GetOrderByID(id)
 	if err != nil {
 		log.Println("1", err)
 		return nil, err
 	}
 
-	payment, err := s.paymentClient.GetPaymentDetail(order.PaymentID)
+	payment, err := s.PaymentClient.GetPaymentDetail(order.PaymentID)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -81,8 +75,8 @@ func (s *service) GetOrderDetailByID(id string) (*OrderDetail, error) {
 	return &resp, nil
 }
 
-func (s *service) GetUserOrders(id int) ([]Order, error) {
-	orders, err := s.orderRepository.GetOrdersByUserID(id)
+func (s *OrderService) GetUserOrders(id int) ([]Order, error) {
+	orders, err := s.OrderRepository.GetOrdersByUserID(id)
 	if err != nil {
 		return nil, err
 	}
