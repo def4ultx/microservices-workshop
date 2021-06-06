@@ -21,6 +21,7 @@ func main() {
 
 	r := createRouter(db)
 	r.Path("/prometheus").Handler(promhttp.Handler())
+	r.Handle("/healthz", http.HandlerFunc(handler.HealthCheck))
 
 	srv := &http.Server{
 		Addr:         "0.0.0.0:8080",
@@ -133,4 +134,9 @@ func createRouter(db *pgxpool.Pool) *mux.Router {
 	r.HandleFunc("/cart/{cartId}/product/{productId}", cart.RemoveProduct).Methods(http.MethodDelete)
 
 	return r
+}
+
+func HealthCheck(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`OK`))
 }

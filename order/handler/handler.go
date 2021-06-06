@@ -98,3 +98,8 @@ func (h *OrderHandler) GetUserOrders(w http.ResponseWriter, r *http.Request) {
 
 	api.WriteSuccessResponse(w, orders)
 }
+
+func HealthCheck(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`OK`))
+}

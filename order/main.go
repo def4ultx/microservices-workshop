@@ -33,7 +33,8 @@ func main() {
 
 	r := mux.NewRouter()
 	r.Use(middleware.Logging, middleware.Metric, middleware.Recover)
-	r.Path("/prometheus").Handler(promhttp.Handler())
+	r.Handle("/prometheus", promhttp.Handler()).Methods(http.MethodGet)
+	r.Handle("/healthz", http.HandlerFunc(handler.HealthCheck))
 
 	o := handler.NewOrderHandler(inventoryClient, paymentClient, shippingClient, mongoClient)
 	r.HandleFunc("/order", o.CreateOrder).Methods(http.MethodPost)
