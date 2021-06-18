@@ -22,5 +22,5 @@ jobs:
           ${{ runner.os }}-go-
     # - name: Build
     #   run: go build -v ./...
-    - name: Test
+    - name: Run Tests
       run: cd order && go test -count=1 -timeout 120s -v ./...
