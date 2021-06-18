@@ -2,8 +2,8 @@ FROM golang:1.14 AS builder
 
 WORKDIR /build
 
-ADD go.mod /build
-ADD go.sum /build
+COPY go.mod .
+COPY go.sum .
 
 RUN go mod download
 
