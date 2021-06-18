@@ -1,0 +1,52 @@
+{
+  "consumer": {
+    "name": "Order-API"
+  },
+  "provider": {
+    "name": "Inventory-API"
+  },
+  "interactions": [
+    {
+      "description": "A request to get product test",
+      "providerState": "Product test1 exist",
+      "request": {
+        "method": "GET",
+        "path": "/product/668337293889241011",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "amount": 1,
+          "id": 1,
+          "name": "string",
+          "price": 1
+        },
+        "matchingRules": {
+          "$.body.amount": {
+            "match": "type"
+          },
+          "$.body.id": {
+            "match": "type"
+          },
+          "$.body.name": {
+            "match": "type"
+          },
+          "$.body.price": {
+            "match": "type"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
