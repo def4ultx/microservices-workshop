@@ -55,6 +55,7 @@ Temporary Items
 
 ### Node ###
 # Logs
+log
 logs
 *.log
 npm-debug.log*
@@ -183,3 +184,5 @@ temp/
 
 test/
 */__pycache__/
+
+contract_test/pact
