@@ -1,0 +1,4 @@
+crdb:
+  host: "inventory-crdb:26257"
+  username: "root"
+  password: "password"

@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 
 	fluent "github.com/evalphobia/logrus_fluent"
@@ -12,10 +14,12 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 func main() {
 	log.Info("Starting the service")
+	setupConfig()
 	setupLogger()
 	db := setupDB()
 
@@ -54,6 +58,17 @@ func main() {
 	os.Exit(0)
 }
 
+func setupConfig() {
+	viper.SetConfigName("config")
+	viper.AddConfigPath(".")
+	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Fatalf("Fatal error config file: %w \n", err)
+	}
+}
+
 func setupLogger() {
 	log.SetFormatter(&log.TextFormatter{})
 	hook, err := fluent.NewWithConfig(fluent.Config{
@@ -70,8 +85,14 @@ func setupLogger() {
 }
 
 func setupDB() *pgxpool.Pool {
+	var (
+		host     = viper.GetString("crdb.host")
+		username = viper.GetString("crdb.username")
+		password = viper.GetString("crdb.password")
+	)
 
-	config, err := pgxpool.ParseConfig("postgres://root:password@inventory-crdb:26257/defaultdb?sslmode=disable")
+	connection := fmt.Sprintf("postgres://%s:%s@%s/defaultdb?sslmode=disable", username, password, host)
+	config, err := pgxpool.ParseConfig(connection)
 	if err != nil {
 		log.Fatal("error configuring the database: ", err)
 	}
