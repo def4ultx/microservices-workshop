@@ -4,7 +4,6 @@ package integration
 
 import (
 	"bytes"
-	"encoding/json"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -14,25 +13,12 @@ import (
 
 func TestAddProduct(t *testing.T) {
 
-	type Product struct {
-		Name   string `json:"name"`
-		Price  int    `json:"price"`
-		Amount int    `json:"amount"`
-	}
-
-	product := Product{
-		Name:   "iPhone X",
-		Price:  2990000,
-		Amount: 100,
-	}
-
-	buffer := bytes.NewBuffer(nil)
-	err := json.NewEncoder(buffer).Encode(&product)
-	if err != nil {
-		t.Errorf("got err: %v", err)
-		return
-	}
-
+	body := []byte(`{
+		"name": "iPhone X",
+		"price": 2990000,
+		"amount": 100
+	}`)
+	buffer := bytes.NewBuffer(body)
 	req, err := http.NewRequest(http.MethodPost, "http://localhost:8080/product", buffer)
 	if err != nil {
 		t.Errorf("got err: %v", err)
