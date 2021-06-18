@@ -1,0 +1,23 @@
+version: '3.5'
+
+services:
+  inventory-api:
+    build: ./inventory
+    depends_on:
+      - inventory-crdb
+    ports:
+      - 8080:8080
+    networks:
+      - workshop-example
+
+  inventory-crdb:
+    image: cockroachdb/cockroach:v20.2.8
+    ports:
+      - 8081:8080
+      - 26257:26257
+    command: start-single-node --insecure
+    networks:
+      - workshop-example
+
+networks:
+  workshop-example:

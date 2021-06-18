@@ -1,0 +1,18 @@
+on: [push, pull_request]
+name: Test
+
+jobs:
+  component-test:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Start containers
+      run: docker-compose -f "docker-compose-test.yml" up -d --build
+
+    - name: Stop containers
+      if: always()
+      run: docker-compose -f "docker-compose-test.yml" down
