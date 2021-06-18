@@ -2,26 +2,26 @@ version: '3.5'
 
 services:
   account-api:
-    image: microservice-worhshop/account-api
+    image: microservices-workshop/account-api
     ports:
       - 8084:8080
     networks:
       - workshop-example
 
   payment-api:
-    image: microservice-worhshop/payment-api
+    image: microservices-workshop/payment-api
     ports:
       - 8085:8080
     networks:
       - workshop-example
 
   notification-consumer:
-    image: microservice-worhshop/notification-consumer
+    image: microservices-workshop/notification-consumer
     networks:
       - workshop-example
 
   shipping-api:
-    image: microservice-worhshop/shipping-api
+    image: microservices-workshop/shipping-api
     ports:
       - 8086:8080
     networks:
