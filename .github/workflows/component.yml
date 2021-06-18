@@ -1,17 +1,34 @@
 on: [push, pull_request]
-name: Test
+name: Component Tests
 
 jobs:
   component-test:
-    timeout-minutes: 10
+    timeout-minutes: 5
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.14.x]
+        os: [ubuntu-latest]
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
 
     - name: Start containers
       run: docker-compose -f "docker-compose-test.yml" up -d --build
+
+    - name: Run Tests
+      run: cd inventory && go test -timeout 120s inventory/integrations -count=1 -v --tags integration
 
     - name: Stop containers
       if: always()
