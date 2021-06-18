@@ -1,0 +1,42 @@
+version: '3.5'
+
+services:
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./etc/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - workshop-example
+    depends_on:
+      - inventory-crdb
+      - inventory-api-1
+      - inventory-api-2
+
+  inventory-api-1:
+    image: microservices-workshop/inventory-api
+    depends_on:
+      - inventory-crdb
+    networks:
+      - workshop-example
+
+  inventory-api-2:
+    image: microservices-workshop/inventory-api
+    depends_on:
+      - inventory-crdb
+    networks:
+      - workshop-example
+
+  inventory-crdb:
+    image: cockroachdb/cockroach:v20.2.8
+    ports:
+      - 8081:8080
+      - 26257:26257
+    command: start-single-node --insecure
+    networks:
+      - workshop-example
+
+networks:
+  workshop-example:
