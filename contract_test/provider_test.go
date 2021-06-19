@@ -24,10 +24,7 @@ func TestProvider(t *testing.T) {
 		PactURLs:        []string{filepath.ToSlash(fmt.Sprintf("./pacts/order-api-inventory-api.json"))},
 		StateHandlers: types.StateHandlers{
 
-			// Setup any state required by the test
-			// in this case, we ensure there is a "user" in the system
 			"Product test1 exist": func() error {
-				// lastName = "crickets"
 				return nil
 			},
 		},

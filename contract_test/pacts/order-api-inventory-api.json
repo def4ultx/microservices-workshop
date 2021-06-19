@@ -11,7 +11,7 @@
       "providerState": "Product test1 exist",
       "request": {
         "method": "GET",
-        "path": "/cart/668531109749719041",
+        "path": "/cart/668532750888501249",
         "headers": {
           "Content-Type": "application/json"
         }
