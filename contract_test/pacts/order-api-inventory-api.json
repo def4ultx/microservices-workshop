@@ -11,7 +11,7 @@
       "providerState": "Product test1 exist",
       "request": {
         "method": "GET",
-        "path": "/product/668337293889241011",
+        "path": "/cart/668531109749719041",
         "headers": {
           "Content-Type": "application/json"
         }
@@ -22,22 +22,32 @@
           "Content-Type": "application/json"
         },
         "body": {
-          "amount": 1,
-          "id": 1,
-          "name": "string",
-          "price": 1
+          "products": [
+            {
+              "amount": 1,
+              "id": 1,
+              "name": "string",
+              "price": 1
+            }
+          ]
         },
         "matchingRules": {
-          "$.body.amount": {
+          "$.body.products": {
+            "min": 1
+          },
+          "$.body.products[*].*": {
             "match": "type"
           },
-          "$.body.id": {
+          "$.body.products[*].amount": {
             "match": "type"
           },
-          "$.body.name": {
+          "$.body.products[*].id": {
             "match": "type"
           },
-          "$.body.price": {
+          "$.body.products[*].name": {
+            "match": "type"
+          },
+          "$.body.products[*].price": {
             "match": "type"
           }
         }
