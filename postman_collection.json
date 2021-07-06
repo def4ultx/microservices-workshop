@@ -1,0 +1,541 @@
+{
+	"info": {
+		"_postman_id": "27ec31ea-31f0-49c6-892e-f80a611e4029",
+		"name": "FutureSkill",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Product - Recommedation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}:8080/products/recommendations",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"recommendations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product - List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}:8080/products",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product - Get by ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"test product 4\",\n    \"price\": 9900,\n    \"amount\": 100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8081/product/656948464057647105",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8081",
+					"path": [
+						"product",
+						"656948464057647105"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Product - Update",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"test product 4\",\n    \"price\": 9900,\n    \"amount\": 100\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8080/product/656992734497669121",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8080",
+					"path": [
+						"product",
+						"656992734497669121"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cart - Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 7891\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8080/cart",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8080",
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cart - Get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 99\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8080/cart/664865144180277249",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8080",
+					"path": [
+						"cart",
+						"664865144180277249"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cart - Remove all product",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}:8080/cart/656948464057647105/products",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8080",
+					"path": [
+						"cart",
+						"656948464057647105",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cart - Add product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 99\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8080/cart/123456/product/656948471224139777",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8080",
+					"path": [
+						"cart",
+						"123456",
+						"product",
+						"656948471224139777"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cart - Remove product",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}:8080/cart/123456/product/656963410444615681",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8080",
+					"path": [
+						"cart",
+						"123456",
+						"product",
+						"656963410444615681"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Shipping - Get information",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}:8086/shipping/12345",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8086",
+					"path": [
+						"shipping",
+						"12345"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Shipping - Update information",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"111/11 Bangkok 10101\",\n    \"status\": \"Pending\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8086/shipping/12345",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8086",
+					"path": [
+						"shipping",
+						"12345"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Account - Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"john@futureskill.com\",\n    \"password\": \"password1\",\n    \"name\": \"John\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8084/user/register",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8084",
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Account - Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"john@futureskill.com\",\n    \"password\": \"password1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8084/user/login",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8084",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Account - Get profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}:8084/user/profile",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8084",
+					"path": [
+						"user",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Account - Update profile",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\n{\n    \"name\": \"Richard\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8084/user/profile",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8084",
+					"path": [
+						"user",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order - Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cartId\": 664865239880531969,\n    \"userId\": 7891,\n    \"payment\": {\n        \"method\": \"CreditCard\",\n        \"creditCard\": {\n            \"number\": \"4111111111111111\",\n            \"expiryMonth\": \"03\",\n            \"expiryYear\": \"2030\",\n            \"cvc\": \"737\",\n            \"holderName\": \"John Smith\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8083/order",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8083",
+					"path": [
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order - Get by ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cartId\": 664865239880531969,\n    \"userId\": 7891,\n    \"payment\": {\n        \"method\": \"CreditCard\",\n        \"creditCard\": {\n            \"number\": \"4111111111111111\",\n            \"expiryMonth\": \"03\",\n            \"expiryYear\": \"2030\",\n            \"cvc\": \"737\",\n            \"holderName\": \"John Smith\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8083/order/91fcba43-cfe5-4253-b9e9-79a143026c39",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8083",
+					"path": [
+						"order",
+						"91fcba43-cfe5-4253-b9e9-79a143026c39"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order - Get all user orders",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cartId\": 664865239880531969,\n    \"userId\": 7891,\n    \"payment\": {\n        \"method\": \"CreditCard\",\n        \"creditCard\": {\n            \"number\": \"4111111111111111\",\n            \"expiryMonth\": \"03\",\n            \"expiryYear\": \"2030\",\n            \"cvc\": \"737\",\n            \"holderName\": \"John Smith\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:8083/orders/7891",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "8083",
+					"path": [
+						"orders",
+						"7891"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payment - Charge credit card",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"method\": \"CreditCard\",\n    \"amount\": \"10000\",\n    \"creditCard\": {\n        \"number\": \"4111111111111111\",\n        \"expiryMonth\": \"03\",\n        \"expiryYear\": \"2030\",\n        \"cvc\": \"737\",\n        \"holderName\": \"John Smith\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{localhost}}:8085/payment/charge",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"port": "8085",
+					"path": [
+						"payment",
+						"charge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payment - Get detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{localhost}}:8085/payment/charge/1234",
+					"protocol": "http",
+					"host": [
+						"{{localhost}}"
+					],
+					"port": "8085",
+					"path": [
+						"payment",
+						"charge",
+						"1234"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
