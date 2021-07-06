@@ -3,7 +3,7 @@
 - Create kind cluster
 
 ```bash
-kind create cluster --config=config.yaml
+kind create cluster --config=kind-config.yml
 ```
 
 - Add kind cluster info to your local kubectl config
